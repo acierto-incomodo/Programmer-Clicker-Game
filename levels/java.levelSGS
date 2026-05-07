@@ -1,0 +1,26 @@
+# DevClicker Level File - Format: .levelSGS (StormGamesStudios)
+
+[meta]
+id = java
+name = Java
+order = 5
+icon = ☕
+color = #ed8b00
+unlockLines = 80000
+author = StormGamesStudios
+
+[gameplay]
+linesRequired = 250000
+clickMultiplier = 4.0
+lpsMultiplier = 3.0
+coinMultiplier = 4.0
+gemDropChance = 0.005
+
+[description]
+tagline = Write once, debug everywhere
+lore = NullPointerException has entered the chat
+tip = AbstractSingletonProxyFactoryBean es un nombre de clase válido.
+
+[rewards]
+completionGems = 40
+completionCoins = 100000

@@ -1,0 +1,26 @@
+# DevClicker Level File - Format: .levelSGS (StormGamesStudios)
+
+[meta]
+id = python
+name = Python
+order = 4
+icon = 🐍
+color = #3776ab
+unlockLines = 20000
+author = StormGamesStudios
+
+[gameplay]
+linesRequired = 80000
+clickMultiplier = 3.0
+lpsMultiplier = 2.0
+coinMultiplier = 3.0
+gemDropChance = 0.004
+
+[description]
+tagline = Indenta o muere
+lore = pip install everything
+tip = El Zen de Python: simple es mejor que complejo. Except when it's not.
+
+[rewards]
+completionGems = 25
+completionCoins = 30000

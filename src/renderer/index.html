@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DevClicker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Oxanium:wght@300;400;600;700;800&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- Title Bar -->
+<div id="titlebar">
+  <div id="titlebar-left">
+    <span class="title-logo">⟨/⟩</span>
+    <span class="title-text">DevClicker <span class="title-version">v1.0</span></span>
+  </div>
+  <div id="titlebar-controls">
+    <button class="tb-btn" onclick="electronAPI.minimize()">─</button>
+    <button class="tb-btn" onclick="electronAPI.maximize()">□</button>
+    <button class="tb-btn close-btn" onclick="electronAPI.close()">✕</button>
+  </div>
+</div>
+
+<!-- Level Banner -->
+<div id="level-banner" class="hidden">
+  <div id="level-banner-inner">
+    <span id="level-banner-icon">🐍</span>
+    <div>
+      <div id="level-banner-title">Nuevo Nivel Desbloqueado</div>
+      <div id="level-banner-name">Python</div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Layout -->
+<div id="app">
+
+  <!-- LEFT: Clicker + Stats -->
+  <div id="panel-left">
+    <div id="level-info">
+      <div id="current-level-badge">
+        <span id="current-level-icon">💻</span>
+        <div>
+          <div id="current-level-name">HTML</div>
+          <div id="current-level-desc">El comienzo de todo</div>
+        </div>
+      </div>
+      <div id="level-progress-bar-wrap">
+        <div id="level-progress-bar"></div>
+        <span id="level-progress-label">0 / 1000 líneas</span>
+      </div>
+    </div>
+
+    <div id="clicker-area">
+      <div id="clicker-btn" onclick="Game.click()">
+        <div id="clicker-inner">
+          <span id="clicker-icon">💻</span>
+          <div id="clicker-ripples"></div>
+        </div>
+      </div>
+      <div id="click-stats">
+        <div class="stat-chip"><span class="stat-label">Por clic</span><span id="stat-per-click" class="stat-val">1</span></div>
+        <div class="stat-chip"><span class="stat-label">Por seg</span><span id="stat-per-sec" class="stat-val">0</span></div>
+      </div>
+    </div>
+
+    <!-- Currency display -->
+    <div id="currencies">
+      <div class="currency-card coin">
+        <span class="currency-icon">🪙</span>
+        <div>
+          <div class="currency-val" id="coins-display">0</div>
+          <div class="currency-label">Coins</div>
+        </div>
+      </div>
+      <div class="currency-card gem">
+        <span class="currency-icon">💎</span>
+        <div>
+          <div class="currency-val" id="gems-display">0</div>
+          <div class="currency-label">Gems</div>
+        </div>
+      </div>
+      <div class="currency-card lines">
+        <span class="currency-icon">📄</span>
+        <div>
+          <div class="currency-val" id="lines-display">0</div>
+          <div class="currency-label">Líneas totales</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Prestige -->
+    <div id="prestige-area">
+      <button id="prestige-btn" onclick="Game.prestige()" class="hidden">
+        <span>⚡ Prestige</span>
+        <span id="prestige-reward"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- CENTER: Tabs -->
+  <div id="panel-center">
+    <div id="tabs">
+      <button class="tab active" data-tab="shop" onclick="UI.switchTab('shop')">🛒 Tienda</button>
+      <button class="tab" data-tab="workers" onclick="UI.switchTab('workers')">👥 Workers</button>
+      <button class="tab" data-tab="upgrades" onclick="UI.switchTab('upgrades')">⬆️ Mejoras</button>
+      <button class="tab" data-tab="levels" onclick="UI.switchTab('levels')">🗺️ Niveles</button>
+      <button class="tab" data-tab="achievements" onclick="UI.switchTab('achievements')">🏆 Logros</button>
+    </div>
+
+    <div id="tab-shop" class="tab-content active">
+      <div class="tab-header">🛒 Componentes PC</div>
+      <div class="section-label coin-label">🪙 Con Coins</div>
+      <div id="shop-coins-list" class="item-list"></div>
+      <div class="section-label gem-label">💎 Con Gems</div>
+      <div id="shop-gems-list" class="item-list"></div>
+    </div>
+
+    <div id="tab-workers" class="tab-content">
+      <div class="tab-header">👥 Trabajadores</div>
+      <div class="section-label">Contrata trabajadores que generen líneas automáticamente</div>
+      <div id="workers-list" class="item-list"></div>
+    </div>
+
+    <div id="tab-upgrades" class="tab-content">
+      <div class="tab-header">⬆️ Mejoras</div>
+      <div class="section-label">Potencia tu productividad</div>
+      <div id="upgrades-list" class="item-list"></div>
+    </div>
+
+    <div id="tab-levels" class="tab-content">
+      <div class="tab-header">🗺️ Niveles / Lenguajes</div>
+      <div class="section-label">Cada nivel es un nuevo lenguaje de programación</div>
+      <div id="levels-list" class="item-list"></div>
+    </div>
+
+    <div id="tab-achievements" class="tab-content">
+      <div class="tab-header">🏆 Logros</div>
+      <div id="achievements-list" class="item-list"></div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Log + Info -->
+  <div id="panel-right">
+    <div id="news-ticker">
+      <span class="ticker-label">📡 LOG</span>
+      <div id="ticker-text">Bienvenido a DevClicker...</div>
+    </div>
+
+    <div id="stats-panel">
+      <div class="stats-title">📊 Estadísticas</div>
+      <div id="stats-list"></div>
+    </div>
+
+    <div id="milestones-panel">
+      <div class="stats-title">🎯 Próximos Hitos</div>
+      <div id="milestones-list"></div>
+    </div>
+
+    <div id="save-panel">
+      <button class="save-btn" onclick="Game.save()">💾 Guardar</button>
+      <button class="save-btn danger" onclick="Game.resetConfirm()">🗑️ Reset</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Floating clicks -->
+<div id="floaters"></div>
+
+<!-- Tooltip -->
+<div id="tooltip" class="hidden"></div>
+
+<!-- Modal -->
+<div id="modal-overlay" class="hidden" onclick="UI.closeModal()">
+  <div id="modal-box" onclick="e => e.stopPropagation()">
+    <div id="modal-title"></div>
+    <div id="modal-body"></div>
+    <div id="modal-actions"></div>
+  </div>
+</div>
+
+<script src="game.js"></script>
+<script src="ui.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

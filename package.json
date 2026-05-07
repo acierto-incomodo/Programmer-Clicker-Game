@@ -1,0 +1,48 @@
+{
+  "name": "programmer-clicker-game",
+  "version": "1.0.0",
+  "description": "DevClicker - The Programming Idle Game",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --dir"
+  },
+  "build": {
+    "appId": "com.stormgamesstudios.devclicker",
+    "productName": "DevClicker",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "dir"
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "dir"
+        }
+      ]
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dir"
+        }
+      ]
+    },
+    "files": [
+      "src/**/*",
+      "levels/**/*",
+      "assets/**/*",
+      "package.json"
+    ]
+  },
+  "devDependencies": {
+    "electron": "^28.3.3",
+    "electron-builder": "^24.13.3"
+  }
+}

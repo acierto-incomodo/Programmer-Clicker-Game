@@ -1,0 +1,21 @@
+devclicker/
+├── src/
+│   ├── main.js          ← Proceso principal Electron (ventana, IPC, guardado)
+│   ├── preload.js       ← Bridge seguro renderer ↔ main
+│   └── renderer/
+│       ├── index.html   ← UI principal
+│       ├── style.css    ← Diseño dark tech (Oxanium + Share Tech Mono)
+│       ├── game.js      ← Motor del juego completo
+│       ├── ui.js        ← Sistema de render UI
+│       └── main.js      ← Entry point renderer
+├── levels/
+│   ├── html.levelSGS
+│   ├── css.levelSGS
+│   ├── javascript.levelSGS
+│   ├── python.levelSGS
+│   ├── java.levelSGS
+│   ├── cpp.levelSGS
+│   ├── rust.levelSGS
+│   ├── haskell.levelSGS
+│   └── levels-structure.json  ← Documentación del formato
+└── package.json

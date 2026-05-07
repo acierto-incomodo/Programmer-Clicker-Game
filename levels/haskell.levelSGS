@@ -1,0 +1,26 @@
+# DevClicker Level File - Format: .levelSGS (StormGamesStudios)
+
+[meta]
+id = haskell
+name = Haskell
+order = 8
+icon = 🔮
+color = #5d4f85
+unlockLines = 5000000
+author = StormGamesStudios
+
+[gameplay]
+linesRequired = 20000000
+clickMultiplier = 20.0
+lpsMultiplier = 15.0
+coinMultiplier = 15.0
+gemDropChance = 0.01
+
+[description]
+tagline = Mónadas y lágrimas
+lore = Si lo entiendes ya no puedes explicarlo
+tip = Una mónada es un monoid en la categoría de endofunctores. Sencillo.
+
+[rewards]
+completionGems = 250
+completionCoins = 10000000

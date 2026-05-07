@@ -1,0 +1,26 @@
+# DevClicker Level File - Format: .levelSGS (StormGamesStudios)
+
+[meta]
+id = cpp
+name = C++
+order = 6
+icon = ⚡
+color = #00599c
+unlockLines = 250000
+author = StormGamesStudios
+
+[gameplay]
+linesRequired = 1000000
+clickMultiplier = 6.0
+lpsMultiplier = 4.0
+coinMultiplier = 6.0
+gemDropChance = 0.006
+
+[description]
+tagline = Segmentation fault (core dumped)
+lore = Libertad absoluta y dolor absoluto
+tip = Recuerda liberar memoria. O no. El SO lo hará cuando el proceso muera.
+
+[rewards]
+completionGems = 70
+completionCoins = 400000

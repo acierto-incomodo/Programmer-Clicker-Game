@@ -1,0 +1,26 @@
+# DevClicker Level File - Format: .levelSGS (StormGamesStudios)
+
+[meta]
+id = javascript
+name = JavaScript
+order = 3
+icon = 🟡
+color = #f7df1e
+unlockLines = 5000
+author = StormGamesStudios
+
+[gameplay]
+linesRequired = 20000
+clickMultiplier = 2.0
+lpsMultiplier = 1.5
+coinMultiplier = 2.0
+gemDropChance = 0.003
+
+[description]
+tagline = undefined is not a function
+lore = El lenguaje que todos odian y todos usan
+tip = typeof null === 'object'. No preguntes por qué.
+
+[rewards]
+completionGems = 15
+completionCoins = 8000

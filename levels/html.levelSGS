@@ -1,0 +1,27 @@
+# DevClicker Level File - Format: .levelSGS (StormGamesStudios)
+# Encoding: UTF-8 | Version: 1.0
+
+[meta]
+id = html
+name = HTML
+order = 1
+icon = 🌐
+color = #e34f26
+unlockLines = 0
+author = StormGamesStudios
+
+[gameplay]
+linesRequired = 1000
+clickMultiplier = 1.0
+lpsMultiplier = 1.0
+coinMultiplier = 1.0
+gemDropChance = 0.001
+
+[description]
+tagline = El comienzo de todo
+lore = Todo empieza con una etiqueta <div>
+tip = Escribe etiquetas, atributos y... cierra los tags por favor.
+
+[rewards]
+completionGems = 5
+completionCoins = 500

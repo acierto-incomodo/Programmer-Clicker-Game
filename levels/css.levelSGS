@@ -1,0 +1,26 @@
+# DevClicker Level File - Format: .levelSGS (StormGamesStudios)
+
+[meta]
+id = css
+name = CSS
+order = 2
+icon = 🎨
+color = #264de4
+unlockLines = 1000
+author = StormGamesStudios
+
+[gameplay]
+linesRequired = 5000
+clickMultiplier = 1.5
+lpsMultiplier = 1.2
+coinMultiplier = 1.5
+gemDropChance = 0.002
+
+[description]
+tagline = Estiliza el mundo
+lore = center: absolute, position: unknown
+tip = display: flex resuelve el 90% de tus problemas. El otro 10% es z-index.
+
+[rewards]
+completionGems = 8
+completionCoins = 2000

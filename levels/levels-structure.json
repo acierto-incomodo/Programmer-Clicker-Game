@@ -1,0 +1,115 @@
+{
+  "$schema": "DevClicker Level Structure v1.0",
+  "description": "Estructura de niveles para DevClicker (StormGamesStudios). Cada nivel es un archivo .levelSGS en la carpeta /levels/",
+  "format": {
+    "fileExtension": ".levelSGS",
+    "folder": "levels/",
+    "encoding": "UTF-8",
+    "comments": "Las líneas que empiezan con # son comentarios y se ignoran",
+    "sections": {
+      "[meta]": {
+        "description": "Metadatos del nivel",
+        "fields": {
+          "id": "Identificador único del nivel (string, sin espacios)",
+          "name": "Nombre visible del nivel",
+          "order": "Orden de aparición (número entero)",
+          "icon": "Emoji del nivel",
+          "color": "Color hexadecimal representativo",
+          "unlockLines": "Líneas totales necesarias para desbloquear",
+          "author": "Autor del nivel"
+        }
+      },
+      "[gameplay]": {
+        "description": "Parámetros de jugabilidad",
+        "fields": {
+          "linesRequired": "Líneas de código necesarias para completar el nivel",
+          "clickMultiplier": "Multiplicador de líneas por clic (float)",
+          "lpsMultiplier": "Multiplicador de líneas por segundo (float)",
+          "coinMultiplier": "Multiplicador de generación de coins (float)",
+          "gemDropChance": "Probabilidad de drop de gemas por clic (0.0 - 1.0)"
+        }
+      },
+      "[description]": {
+        "description": "Textos del nivel",
+        "fields": {
+          "tagline": "Frase corta que aparece bajo el nombre",
+          "lore": "Descripción de lore/humor",
+          "tip": "Consejo o curiosidad sobre el lenguaje"
+        }
+      },
+      "[rewards]": {
+        "description": "Recompensas al completar el nivel",
+        "fields": {
+          "completionGems": "Gemas al completar",
+          "completionCoins": "Coins al completar"
+        }
+      }
+    }
+  },
+  "levels": [
+    {
+      "id": "html",
+      "file": "levels/html.levelSGS",
+      "name": "HTML",
+      "order": 1,
+      "theme": "web"
+    },
+    {
+      "id": "css",
+      "file": "levels/css.levelSGS",
+      "name": "CSS",
+      "order": 2,
+      "theme": "web"
+    },
+    {
+      "id": "javascript",
+      "file": "levels/javascript.levelSGS",
+      "name": "JavaScript",
+      "order": 3,
+      "theme": "web"
+    },
+    {
+      "id": "python",
+      "file": "levels/python.levelSGS",
+      "name": "Python",
+      "order": 4,
+      "theme": "general"
+    },
+    {
+      "id": "java",
+      "file": "levels/java.levelSGS",
+      "name": "Java",
+      "order": 5,
+      "theme": "enterprise"
+    },
+    {
+      "id": "cpp",
+      "file": "levels/cpp.levelSGS",
+      "name": "C++",
+      "order": 6,
+      "theme": "systems"
+    },
+    {
+      "id": "rust",
+      "file": "levels/rust.levelSGS",
+      "name": "Rust",
+      "order": 7,
+      "theme": "systems"
+    },
+    {
+      "id": "haskell",
+      "file": "levels/haskell.levelSGS",
+      "name": "Haskell",
+      "order": 8,
+      "theme": "functional"
+    }
+  ],
+  "howToAddLevel": {
+    "step1": "Crea un archivo NombreNivel.levelSGS en la carpeta levels/",
+    "step2": "Copia la estructura de otro nivel como plantilla",
+    "step3": "Cambia el id (único), name, order (mayor que el último nivel), y unlockLines",
+    "step4": "Ajusta los multiplicadores en [gameplay] según la dificultad del nivel",
+    "step5": "Reinicia el juego - el nivel aparecerá automáticamente",
+    "example": "Para añadir TypeScript después de JavaScript, crea typescript.levelSGS con order=4 y ajusta los order de los niveles posteriores"
+  }
+}

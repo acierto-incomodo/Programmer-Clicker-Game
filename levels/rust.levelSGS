@@ -1,0 +1,26 @@
+# DevClicker Level File - Format: .levelSGS (StormGamesStudios)
+
+[meta]
+id = rust
+name = Rust
+order = 7
+icon = 🦀
+color = #ce422b
+unlockLines = 1000000
+author = StormGamesStudios
+
+[gameplay]
+linesRequired = 5000000
+clickMultiplier = 10.0
+lpsMultiplier = 8.0
+coinMultiplier = 10.0
+gemDropChance = 0.008
+
+[description]
+tagline = El compilador siempre tiene razón
+lore = Ownership, borrowing, y discusiones en Twitter
+tip = El borrow checker es tu amigo. Eventualmente lo aceptarás.
+
+[rewards]
+completionGems = 120
+completionCoins = 2000000
