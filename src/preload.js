@@ -8,4 +8,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   loadGame: () => ipcRenderer.invoke('load-game'),
   deleteSave: () => ipcRenderer.invoke('delete-save'),
   loadLevels: () => ipcRenderer.invoke('load-levels'),
+  getVersion: () => ipcRenderer.invoke('get-version'),
 });

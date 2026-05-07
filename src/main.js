@@ -49,6 +49,16 @@ ipcMain.on('window-maximize', () => {
 });
 ipcMain.on('window-close', () => mainWindow.close());
 
+ipcMain.handle('get-version', async () => {
+  const versionPath = path.join(__dirname, '../GameVersion.txt');
+  if (fs.existsSync(versionPath)) {
+    try {
+      return fs.readFileSync(versionPath, 'utf8').trim();
+    } catch (e) { console.error('Error al leer GameVersion.txt:', e); }
+  }
+  return app.getVersion(); // Fallback a la versión de package.json
+});
+
 // ── IPC: Save / Load game ─────────────────────────────────────────────────────
 const savePath = path.join(app.getPath('userData'), 'savegame.json');
 

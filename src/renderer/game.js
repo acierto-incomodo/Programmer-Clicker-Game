@@ -114,6 +114,13 @@ const Game = (() => {
       levels = DEFAULT_LEVELS;
     }
 
+    // Cargar versión desde el archivo GameVersion.txt
+    try {
+      const version = await window.electronAPI.getVersion();
+      const versionEl = document.getElementById('game-version');
+      if (versionEl) versionEl.textContent = `v${version}`;
+    } catch (err) { console.warn("No se pudo cargar la versión:", err); }
+
     // Load saved game
     const saved = await window.electronAPI.loadGame();
     if (saved) {
