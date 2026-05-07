@@ -133,3 +133,5 @@ package-lock.json
 *.spec
 *.spec
 NoCompatibleToInstall.spec
+/build
+*.spec

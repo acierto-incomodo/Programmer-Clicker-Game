@@ -5,7 +5,7 @@ a = Analysis(
     ['NoCompatibleToInstall.py'],
     pathex=[],
     binaries=[],
-    datas=[('assets/app.png', '.'), ('assets/app.ico', '.')],
+    datas=[('assets/logo.png', '.'), ('assets/logo.ico', '.')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -35,5 +35,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['assets\\app.ico'],
+    icon=['assets\\logo.ico'],
 )
