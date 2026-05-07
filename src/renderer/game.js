@@ -201,8 +201,8 @@ const Game = (() => {
 
     // Coin reward on click
     const coinMult = currentLevel()?.gameplay?.coinMultiplier || 1;
-    const coinGain = Math.floor(power * 0.5 * coinMult);
-    if (coinGain > 0) state.coins += coinGain;
+    const coinGain = Math.max(1, Math.floor(power * 0.5 * coinMult));
+    state.coins += coinGain;
 
     // Gem rare chance on click
     if (Math.random() < 0.002) {
@@ -212,7 +212,7 @@ const Game = (() => {
     }
 
     UI.spawnFloater(`+${fmt(power)} 📄`);
-    if (coinGain > 0 && coinGain >= 10) UI.spawnFloater(`+${fmt(coinGain)} 🪙`, true);
+    if (coinGain > 0) UI.spawnFloater(`+${fmt(coinGain)} 🪙`, true);
     checkLevelComplete();
     checkAchievements();
     UI.render();
@@ -223,7 +223,7 @@ const Game = (() => {
     state.sessionLines += n;
     // Passive coin generation
     const coinMult = currentLevel()?.gameplay?.coinMultiplier || 1;
-    state.coins += Math.floor(n * 0.3 * coinMult);
+    state.coins += n * 0.3 * coinMult;
   }
 
   function buyWorker(id) {
@@ -231,7 +231,7 @@ const Game = (() => {
     if (!w) return;
     const count = state.workers[id] || 0;
     const cost = Math.floor(w.baseCost * Math.pow(w.costMult, count));
-    if (w.currency === 'coins' && state.coins < cost) return;
+    if (w.currency === 'coins' && Math.floor(state.coins + 0.0001) < cost) return;
     if (w.currency === 'gems' && state.gems < cost) return;
     if (w.currency === 'coins') state.coins -= cost;
     else state.gems -= cost;
@@ -245,7 +245,7 @@ const Game = (() => {
     if (!c) return;
     const count = state.components[id] || 0;
     const cost = Math.floor(c.cost * Math.pow(c.costMult, count));
-    if (c.currency === 'coins' && state.coins < cost) return;
+    if (c.currency === 'coins' && Math.floor(state.coins + 0.0001) < cost) return;
     if (c.currency === 'gems' && state.gems < cost) return;
     if (c.currency === 'coins') state.coins -= cost;
     else state.gems -= cost;
@@ -258,7 +258,7 @@ const Game = (() => {
     if (state.upgrades[id]) return;
     const u = UPGRADES.find(x => x.id === id);
     if (!u || !u.req()) return;
-    if (u.currency === 'coins' && state.coins < u.cost) return;
+    if (u.currency === 'coins' && Math.floor(state.coins + 0.0001) < u.cost) return;
     if (u.currency === 'gems' && state.gems < u.cost) return;
     if (u.currency === 'coins') state.coins -= u.cost;
     else state.gems -= u.cost;
@@ -351,6 +351,18 @@ const Game = (() => {
     UI.render();
   }
 
+  function requestClose() {
+    UI.showModal(
+      'Salir del Juego',
+      '¿Quieres guardar tu progreso antes de salir?',
+      [
+        { label: 'Guardar ahora', fn: () => { save(); UI.closeModal(); } },
+        { label: 'Guardar y Salir', fn: async () => { await save(); electronAPI.close(); }, cls: 'confirm' },
+        { label: 'Cancelar', fn: UI.closeModal }
+      ]
+    );
+  }
+
   // ── Achievements ───────────────────────────────────────────────────────────
   function checkAchievements() {
     for (const ach of ACHIEVEMENTS) {
@@ -394,7 +406,7 @@ const Game = (() => {
     if (n >= 1e9) return (n / 1e9).toFixed(2) + 'B';
     if (n >= 1e6) return (n / 1e6).toFixed(2) + 'M';
     if (n >= 1e3) return (n / 1e3).toFixed(1) + 'K';
-    return Math.floor(n).toString();
+    return Math.floor(n + 0.0001).toString();
   }
 
   const logs = [];
@@ -406,7 +418,7 @@ const Game = (() => {
 
   // ── Public API ─────────────────────────────────────────────────────────────
   return {
-    init, click, save, resetConfirm, prestige,
+    init, click, save, resetConfirm, prestige, requestClose,
     buyWorker, buyComponent, buyUpgrade, switchLevel,
     getState: () => state,
     getLevels: () => levels,

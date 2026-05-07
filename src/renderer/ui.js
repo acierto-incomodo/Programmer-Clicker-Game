@@ -85,7 +85,7 @@ const UI = (() => {
   function componentCard(c, state) {
     const count = state.components[c.id] || 0;
     const cost = Game.componentCost(c.id);
-    const canAfford = c.currency === 'coins' ? state.coins >= cost : state.gems >= cost;
+    const canAfford = c.currency === 'coins' ? Math.floor(state.coins + 0.0001) >= cost : state.gems >= cost;
     const costIcon = c.currency === 'coins' ? '🪙' : '💎';
     const costClass = c.currency === 'coins' ? 'cost-coin' : 'cost-gem';
     const btnClass = c.currency === 'coins' ? '' : 'gem-btn';
@@ -109,7 +109,7 @@ const UI = (() => {
     renderList('workers-list', _workers, (w) => {
       const count = state.workers[w.id] || 0;
       const cost = Game.workerCost(w.id);
-      const canAfford = w.currency === 'coins' ? state.coins >= cost : state.gems >= cost;
+      const canAfford = w.currency === 'coins' ? Math.floor(state.coins + 0.0001) >= cost : state.gems >= cost;
       const costIcon = w.currency === 'coins' ? '🪙' : '💎';
       const costClass = w.currency === 'coins' ? 'cost-coin' : 'cost-gem';
       const btnClass = w.currency === 'coins' ? '' : 'gem-btn';
@@ -134,7 +134,7 @@ const UI = (() => {
     renderList('upgrades-list', _upgrades, (u) => {
       const owned = !!state.upgrades[u.id];
       const canReq = u.req();
-      const canAfford = u.currency === 'coins' ? state.coins >= u.cost : state.gems >= u.cost;
+      const canAfford = u.currency === 'coins' ? Math.floor(state.coins + 0.0001) >= u.cost : state.gems >= u.cost;
       const costIcon = u.currency === 'coins' ? '🪙' : '💎';
       const costClass = u.currency === 'coins' ? 'cost-coin' : 'cost-gem';
       const el = document.createElement('div');

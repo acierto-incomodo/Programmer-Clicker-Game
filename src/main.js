@@ -1,15 +1,20 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, screen } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
 let mainWindow;
 
 function createWindow() {
+  const primaryDisplay = screen.getPrimaryDisplay();
+  const { width, height } = primaryDisplay.bounds;
+
   mainWindow = new BrowserWindow({
-    width: 1280,
-    height: 800,
-    minWidth: 1100,
-    minHeight: 700,
+    width: width,
+    height: height,
+    x: 0,
+    y: 0,
+    resizable: true,
+    movable: false,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -18,11 +23,18 @@ function createWindow() {
     frame: false,
     backgroundColor: '#0d0d0f',
     show: false,
+    fullscreen: true,
+    skipTaskbar: true,
+    alwaysOnTop: false,
     icon: path.join(__dirname, '../assets/icon.png')
   });
 
   mainWindow.loadFile(path.join(__dirname, 'renderer/index.html'));
-  mainWindow.once('ready-to-show', () => mainWindow.show());
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.maximize();
+    mainWindow.show();
+    mainWindow.setKiosk(true);
+  });
 }
 
 app.whenReady().then(createWindow);
