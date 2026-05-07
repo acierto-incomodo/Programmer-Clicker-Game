@@ -1,15 +1,15 @@
 {
   "name": "programmer-clicker-game",
   "version": "1.0.0",
-  "description": "DevClicker - The Programming Idle Game",
+  "description": "Programmer Clicker Game - The Programming Idle Game by StormGamesStudios",
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
     "build": "electron-builder --dir"
   },
   "build": {
-    "appId": "com.stormgamesstudios.devclicker",
-    "productName": "DevClicker",
+    "appId": "com.stormgamesstudios.programmer-clicker-game",
+    "productName": "Programmer Clicker Game",
     "directories": {
       "output": "dist"
     },

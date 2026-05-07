@@ -289,7 +289,73 @@ button { cursor: pointer; border: none; background: none; color: inherit; font-f
 .modal-btn.confirm { background: var(--red); border-color: var(--red); color: #fff; }
 .modal-btn.confirm:hover { background: #c62828; }
 
-/* ── Utility ──────────────────────────────────────────────────────────────────── */
+/* ── Tutorial ─────────────────────────────────────────────────────────────────── */
+.tutorial-tab { color: var(--accent) !important; }
+
+.tutorial-section {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 16px; margin-bottom: 4px;
+}
+.tutorial-section-title {
+  font-family: var(--font-main); font-size: 14px; font-weight: 700;
+  color: var(--accent); margin-bottom: 10px; letter-spacing: .5px;
+}
+.tutorial-text {
+  font-size: 12px; color: var(--text2); line-height: 1.7; margin-bottom: 8px;
+}
+.tutorial-tip {
+  background: rgba(79,195,247,.06); border: 1px solid rgba(79,195,247,.15);
+  border-radius: var(--radius2); padding: 8px 12px;
+  font-size: 11px; color: var(--text2); line-height: 1.5; margin-top: 8px;
+  font-family: var(--font-mono);
+}
+.tutorial-tip code {
+  background: rgba(79,195,247,.1); border-radius: 3px; padding: 0 4px;
+  color: var(--accent); font-family: var(--font-mono);
+}
+.tut-hl { font-weight: 700; }
+.tut-hl.coin { color: var(--gold); }
+.tut-hl.gem { color: var(--gem); }
+
+.tutorial-currency-row {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: var(--bg4); border: 1px solid var(--border); border-radius: var(--radius2);
+  padding: 10px 12px; margin: 6px 0;
+}
+.tut-currency-icon { font-size: 24px; flex-shrink: 0; }
+.tut-currency-name { font-family: var(--font-main); font-weight: 700; font-size: 13px; color: var(--text); margin-bottom: 2px; }
+.tut-currency-desc { font-size: 11px; color: var(--text3); line-height: 1.5; }
+
+.tutorial-workers-grid { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
+.tut-worker-row {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--bg4); border-radius: var(--radius2); padding: 7px 10px;
+  font-size: 11px; color: var(--text2); border: 1px solid var(--border);
+}
+.tut-worker-row span { font-size: 18px; flex-shrink: 0; }
+.tut-worker-row b { color: var(--text); }
+.tut-gem-row { border-color: rgba(206,147,216,.2) !important; }
+.tut-gem-row b { color: var(--gem) !important; }
+
+.tut-list { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
+.tut-list-item {
+  background: var(--bg4); border: 1px solid var(--border); border-radius: var(--radius2);
+  padding: 7px 12px; font-size: 11px; color: var(--text2); line-height: 1.5;
+}
+.tut-list-item b { color: var(--text); }
+
+.tut-strategy { border-color: rgba(255,213,79,.2); background: rgba(255,213,79,.03); }
+.tut-strategy .tutorial-section-title { color: var(--gold); }
+.tut-steps { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+.tut-step { display: flex; align-items: flex-start; gap: 12px; }
+.tut-step-num {
+  width: 22px; height: 22px; border-radius: 50%; background: var(--gold2);
+  color: #000; font-family: var(--font-main); font-weight: 800; font-size: 12px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;
+}
+.tut-step div { font-size: 12px; color: var(--text2); line-height: 1.6; }
+.tut-step b { color: var(--text); }
+
 .hidden { display: none !important; }
 .glow-text { color: var(--accent); text-shadow: 0 0 10px rgba(79,195,247,.4); }
 

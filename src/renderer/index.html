@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>DevClicker</title>
+<title>Programmer Clicker Game</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Oxanium:wght@300;400;600;700;800&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css"/>
@@ -14,7 +14,7 @@
 <div id="titlebar">
   <div id="titlebar-left">
     <span class="title-logo">⟨/⟩</span>
-    <span class="title-text">DevClicker <span class="title-version">v1.0</span></span>
+    <span class="title-text">Programmer Clicker Game <span class="title-version">v1.0</span></span>
   </div>
   <div id="titlebar-controls">
     <button class="tb-btn" onclick="electronAPI.minimize()">─</button>
@@ -108,6 +108,7 @@
       <button class="tab" data-tab="upgrades" onclick="UI.switchTab('upgrades')">⬆️ Mejoras</button>
       <button class="tab" data-tab="levels" onclick="UI.switchTab('levels')">🗺️ Niveles</button>
       <button class="tab" data-tab="achievements" onclick="UI.switchTab('achievements')">🏆 Logros</button>
+      <button class="tab tutorial-tab" data-tab="tutorial" onclick="UI.switchTab('tutorial')">📖 Tutorial</button>
     </div>
 
     <div id="tab-shop" class="tab-content active">
@@ -139,6 +140,155 @@
     <div id="tab-achievements" class="tab-content">
       <div class="tab-header">🏆 Logros</div>
       <div id="achievements-list" class="item-list"></div>
+    </div>
+
+    <div id="tab-tutorial" class="tab-content">
+      <div class="tab-header">📖 Cómo Jugar</div>
+
+      <div class="tutorial-section">
+        <div class="tutorial-section-title">🖱️ El Botón Principal</div>
+        <div class="tutorial-text">
+          El gran botón del centro izquierdo es tu herramienta principal. Cada vez que haces clic, generas <span class="tut-hl coin">líneas de código</span> y una pequeña cantidad de <span class="tut-hl coin">🪙 Coins</span>. Cuanto más mejores tu personaje, más líneas producirás por clic.
+        </div>
+        <div class="tutorial-tip">💡 Al principio haz clic frecuentemente mientras acumulas coins para contratar tu primer trabajador.</div>
+      </div>
+
+      <div class="tutorial-section">
+        <div class="tutorial-section-title">🪙 Coins y 💎 Gems</div>
+        <div class="tutorial-text">
+          Hay dos monedas en el juego:
+        </div>
+        <div class="tutorial-currency-row">
+          <span class="tut-currency-icon">🪙</span>
+          <div>
+            <div class="tut-currency-name">Coins</div>
+            <div class="tut-currency-desc">Se consiguen haciendo clic y con trabajadores. Son la moneda principal para comprar componentes, contratar workers y desbloquear mejoras básicas.</div>
+          </div>
+        </div>
+        <div class="tutorial-currency-row">
+          <span class="tut-currency-icon">💎</span>
+          <div>
+            <div class="tut-currency-name">Gems</div>
+            <div class="tut-currency-desc">Moneda premium. Se obtienen raramente al hacer clic (0.2% de probabilidad), de forma automática cuando tu producción es alta (&gt;100 LPS), y como recompensa al completar niveles. Se usan para comprar items muy poderosos y workers especiales como la IA Asistente.</div>
+          </div>
+        </div>
+        <div class="tutorial-tip">💡 Las gems son escasas — guárdalas para la IA Asistente o los componentes cuánticos que dan un boost enorme.</div>
+      </div>
+
+      <div class="tutorial-section">
+        <div class="tutorial-section-title">👥 Trabajadores (Workers)</div>
+        <div class="tutorial-text">
+          Los trabajadores generan líneas por segundo (LPS) de forma automática, sin que tengas que hacer clic. Cada tipo tiene un coste base que <strong>sube un 15% por cada unidad</strong> que compras del mismo tipo.
+        </div>
+        <div class="tutorial-workers-grid">
+          <div class="tut-worker-row"><span>👶</span><div><b>Intern</b> — 0.1 LPS/u · empieza barato, escala bien en cantidad</div></div>
+          <div class="tut-worker-row"><span>👨‍💻</span><div><b>Junior Dev</b> — 0.5 LPS/u · buen ratio coste/rendimiento al inicio</div></div>
+          <div class="tut-worker-row"><span>🧑‍💻</span><div><b>Mid Dev</b> — 2 LPS/u · comienza a notarse la diferencia</div></div>
+          <div class="tut-worker-row"><span>🧙‍♂️</span><div><b>Senior Dev</b> — 10 LPS/u · productividad seria</div></div>
+          <div class="tut-worker-row"><span>👑</span><div><b>Tech Lead</b> — 50 LPS/u · gestiona equipos enteros</div></div>
+          <div class="tut-worker-row"><span>🏗️</span><div><b>Arquitecto</b> — 200 LPS/u · microservicios para todos</div></div>
+          <div class="tut-worker-row tut-gem-row"><span>🤖</span><div><b>IA Asistente</b> — 1000 LPS/u · cuesta 💎 Gems, pero es increíblemente potente</div></div>
+        </div>
+        <div class="tutorial-tip">💡 Los multiplicadores de mejoras (Docker, Git…) afectan a todos los workers, así que desbloquéalos antes de comprar muchos.</div>
+      </div>
+
+      <div class="tutorial-section">
+        <div class="tutorial-section-title">🛒 Tienda — Componentes PC</div>
+        <div class="tutorial-text">
+          Los componentes mejoran tanto tus <span class="tut-hl">líneas por clic</span> como tus <span class="tut-hl">LPS automáticos</span>. Cada compra del mismo componente sube su precio (entre ×1.5 y ×1.8). Hay dos categorías:
+        </div>
+        <div class="tut-list">
+          <div class="tut-list-item"><span class="tut-hl coin">🪙 Con Coins</span> — Teclado Mecánico, RAM, SSD, CPU, GPU, Monitores, Servidor. Asequibles y fundamentales para crecer.</div>
+          <div class="tut-list-item"><span class="tut-hl gem">💎 Con Gems</span> — CPU Cuántica, Chip de IA, Data Center. Muy caros pero con bonuses masivos (+50/+100 click, +100/+2000 LPS).</div>
+        </div>
+        <div class="tutorial-tip">💡 El Servidor Dedicado da +10 click y +20 LPS — es de los mejores de coins. Ahorra para él.</div>
+      </div>
+
+      <div class="tutorial-section">
+        <div class="tutorial-section-title">⬆️ Mejoras</div>
+        <div class="tutorial-text">
+          Las mejoras son compras únicas (no repetibles) que aplican multiplicadores permanentes. Algunas tienen requisitos antes de poder comprarse.
+        </div>
+        <div class="tut-list">
+          <div class="tut-list-item"><b>Mecanografía</b> — ×2 líneas por clic. Sin requisito, cómprala lo antes posible.</div>
+          <div class="tut-list-item"><b>Dark Mode</b> — ×1.5 a todos los workers. Requiere tener al menos 1 worker.</div>
+          <div class="tut-list-item"><b>Aprender Vim</b> — ×3 líneas por clic. Requiere tener Mecanografía.</div>
+          <div class="tut-list-item"><b>Dominar Git</b> — +50% LPS global. Requiere 3+ workers.</div>
+          <div class="tut-list-item"><b>Docker Expert</b> — ×2 todos los workers. Requiere Git.</div>
+          <div class="tut-list-item"><b>Instalar Linux</b> — ×1.5 click + ×1.25 LPS. Sin requisito.</div>
+          <div class="tut-list-item"><b>Cafeína Infinita</b> — ×2 a todo. Sin requisito (¡imprescindible!).</div>
+          <div class="tut-list-item"><b>Microservicios</b> — ×3 LPS pero ×0.5 clicks. Requiere 1 Arquitecto.</div>
+          <div class="tut-list-item tut-gem-row"><b>GitHub Copilot</b> — ×5 líneas por clic. Cuesta 💎 Gems.</div>
+          <div class="tut-list-item tut-gem-row"><b>Cloud Infinita</b> — ×10 LPS global. Requiere Docker + 💎 Gems.</div>
+        </div>
+      </div>
+
+      <div class="tutorial-section">
+        <div class="tutorial-section-title">🗺️ Niveles — Lenguajes de Programación</div>
+        <div class="tutorial-text">
+          Cada nivel representa un lenguaje de programación. Al empezar estás en <b>HTML</b>. Para avanzar al siguiente nivel debes generar las líneas requeridas <em>en ese nivel</em> (se reinicia al cambiar). Completar un nivel desbloquea el siguiente y te da <span class="tut-hl gem">💎 Gems</span> de recompensa. Cada nivel aplica multiplicadores propios a clicks, LPS y generación de coins.
+        </div>
+        <div class="tut-list">
+          <div class="tut-list-item">🌐 <b>HTML</b> → 1,000 líneas · multiplicadores base</div>
+          <div class="tut-list-item">🎨 <b>CSS</b> → 5,000 líneas · ×1.5 click, ×1.2 LPS</div>
+          <div class="tut-list-item">🟡 <b>JavaScript</b> → 20,000 líneas · ×2 click, ×1.5 LPS</div>
+          <div class="tut-list-item">🐍 <b>Python</b> → 80,000 líneas · ×3 click, ×2 LPS</div>
+          <div class="tut-list-item">☕ <b>Java</b> → 250,000 líneas · ×4 click, ×3 LPS</div>
+          <div class="tut-list-item">⚡ <b>C++</b> → 1,000,000 líneas · ×6 click, ×4 LPS</div>
+          <div class="tut-list-item">🦀 <b>Rust</b> → 5,000,000 líneas · ×10 click, ×8 LPS</div>
+          <div class="tut-list-item">🔮 <b>Haskell</b> → 20,000,000 líneas · ×20 click, ×15 LPS</div>
+        </div>
+        <!-- <div class="tutorial-tip">💡 Puedes añadir nuevos niveles creando archivos <code>.levelSGS</code> en la carpeta <code>levels/</code>. Mira <code>levels-structure.json</code> para saber cómo.</div> -->
+      </div>
+
+      <div class="tutorial-section">
+        <div class="tutorial-section-title">⚡ Prestige</div>
+        <div class="tutorial-text">
+          Cuando completes <strong>3 o más niveles</strong>, aparecerá el botón <b>⚡ Prestige</b> en el panel izquierdo. Al hacer prestige:
+        </div>
+        <div class="tut-list">
+          <div class="tut-list-item">❌ Pierdes: coins, líneas, workers, componentes, mejoras y niveles completados.</div>
+          <div class="tut-list-item">✅ Conservas: todas las gemas actuales + bonus de gemas por niveles completados, todos los logros desbloqueados, y el contador de prestiges.</div>
+          <div class="tut-list-item">🚀 Ganas: multiplicador global permanente de ×1.5 por cada prestige (stack), y el poder por clic base aumenta.</div>
+        </div>
+        <div class="tutorial-tip">💡 Haz prestige cuando sientas que el progreso se ha ralentizado demasiado. El multiplicador hace que la siguiente run sea mucho más rápida.</div>
+      </div>
+
+      <div class="tutorial-section">
+        <div class="tutorial-section-title">🏆 Logros</div>
+        <div class="tutorial-text">
+          Los logros se desbloquean automáticamente al cumplir sus condiciones. Cuando se desbloquea uno, aparece una notificación en la esquina inferior derecha. No dan bonus directos, pero son un buen indicador de tu progreso.
+        </div>
+        <div class="tut-list">
+          <div class="tut-list-item">Por <b>clics</b>: primer clic, 100 clics, 1,000 clics.</div>
+          <div class="tut-list-item">Por <b>líneas</b>: 1K, 100K, 1M líneas totales.</div>
+          <div class="tut-list-item">Por <b>workers</b>: 1 empleado, 10 empleados (Startup), 50 empleados (Scale-up).</div>
+          <div class="tut-list-item">Por <b>gems</b>: primera gem, 100 gems acumuladas.</div>
+          <div class="tut-list-item">Por <b>niveles</b>: completar 1 nivel, completar 3 niveles.</div>
+          <div class="tut-list-item">Por <b>prestige</b>: hacer el primer prestige.</div>
+        </div>
+      </div>
+
+      <div class="tutorial-section">
+        <div class="tutorial-section-title">💾 Guardado</div>
+        <div class="tutorial-text">
+          El juego se guarda automáticamente cada 30 segundos. También puedes guardar manualmente con el botón <b>💾 Guardar</b> del panel derecho. El guardado se almacena en los datos de la app (userData de Electron), no en la carpeta del juego.
+        </div>
+        <div class="tutorial-tip">⚠️ El botón 🗑️ Reset borra la partida permanentemente. Úsalo solo si quieres empezar de cero.</div>
+      </div>
+
+      <div class="tutorial-section tut-strategy">
+        <div class="tutorial-section-title">🎯 Estrategia Recomendada</div>
+        <div class="tut-steps">
+          <div class="tut-step"><span class="tut-step-num">1</span><div>Haz clic hasta tener coins para comprar <b>Mecanografía</b> y el primer <b>Intern</b>.</div></div>
+          <div class="tut-step"><span class="tut-step-num">2</span><div>Sigue comprando Interns y algún Junior Dev. Desbloquea <b>Dark Mode</b> con el primer worker.</div></div>
+          <div class="tut-step"><span class="tut-step-num">3</span><div>Ahorra para <b>Cafeína Infinita</b> (×2 global) — es el mejor multiplicador por precio.</div></div>
+          <div class="tut-step"><span class="tut-step-num">4</span><div>Compra <b>Vim</b> y luego <b>Git</b> cuando tengas 3 workers. Sube al <b>Mid Dev</b>.</div></div>
+          <div class="tut-step"><span class="tut-step-num">5</span><div>Con buena producción, desbloquea <b>Docker</b>. Las gems que ahorres úsalas en <b>GitHub Copilot</b>.</div></div>
+          <div class="tut-step"><span class="tut-step-num">6</span><div>Completa niveles para conseguir más gems. Cuando tengas 3 niveles completados, haz tu primer <b>⚡ Prestige</b>.</div></div>
+        </div>
+      </div>
+
     </div>
   </div>
 
