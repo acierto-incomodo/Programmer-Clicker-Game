@@ -375,7 +375,8 @@ const Game = (() => {
       '¿Quieres guardar tu progreso antes de salir?',
       [
         { label: 'Guardar ahora', fn: () => { save(); UI.closeModal(); } },
-        { label: 'Guardar y Salir', fn: async () => { await save(); electronAPI.close(); }, cls: 'confirm' },
+        { label: 'Guardar y Salir', fn: async () => { await save(); window.electronAPI.close(); }, cls: 'confirm' },
+        { label: 'Salir sin guardar', fn: () => { window.electronAPI.close(); }, cls: 'danger' },
         { label: 'Cancelar', fn: UI.closeModal }
       ]
     );

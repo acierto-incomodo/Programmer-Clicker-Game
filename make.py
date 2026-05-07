@@ -92,6 +92,13 @@ def main():
     # Copiar GameVersion.txt
     if os.path.exists("GameVersion.txt"):
         shutil.copy("GameVersion.txt", publish_dir / "GameVersion.txt")
+        
+    # Copiar la carpeta assets
+    assets_src = Path("assets")
+    assets_dest = publish_dir / "assets"
+    if assets_src.exists():
+        print(f"==> Copiando carpeta de recursos: {assets_src} a {assets_dest}")
+        shutil.copytree(assets_src, assets_dest, dirs_exist_ok=True)
 
     # 6. Copiar build de Windows y comprimir (Equivalente a make.bat)
     win_unpacked = Path("dist/win-unpacked")
