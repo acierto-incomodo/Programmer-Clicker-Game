@@ -276,16 +276,13 @@ button { cursor: pointer; border: none; background: none; color: inherit; font-f
 #modal-overlay.hidden { display: none; }
 #modal-box {
   background: var(--bg3); border: 1px solid var(--border2); border-radius: var(--radius);
-  padding: 24px; max-width: 380px; width: 90%;
   padding: 24px; max-width: 500px; width: 95%;
   box-shadow: 0 10px 40px rgba(0,0,0,0.8);
 }
 #modal-title { font-family: var(--font-main); font-size: 18px; font-weight: 700; margin-bottom: 12px; }
 #modal-body { font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 16px; }
-#modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
 #modal-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 .modal-btn {
-  padding: 8px 16px; border-radius: var(--radius2); font-family: var(--font-main); font-size: 13px; font-weight: 600;
   padding: 10px 18px; border-radius: var(--radius2); font-family: var(--font-main); font-size: 14px; font-weight: 600;
   border: 1px solid var(--border2); color: var(--text2); background: var(--bg4); transition: all .2s;
   min-width: 140px; text-align: center; letter-spacing: 0.5px;
