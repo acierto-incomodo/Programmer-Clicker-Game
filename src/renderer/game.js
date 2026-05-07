@@ -42,8 +42,8 @@ const Game = (() => {
     { id: 'keyboard', name: 'Teclado Mecánico', icon: '⌨️', desc: 'Teclas más rápidas', clickBonus: 1, lpsBonus: 0, cost: 50, costMult: 1.5, currency: 'coins' },
     { id: 'ram', name: 'RAM 8GB', icon: '🧠', desc: 'Más velocidad de proceso', clickBonus: 0, lpsBonus: 0.5, cost: 200, costMult: 1.5, currency: 'coins' },
     { id: 'ssd', name: 'SSD NVMe', icon: '💾', desc: 'Compilación ultra rápida', clickBonus: 2, lpsBonus: 1, cost: 500, costMult: 1.6, currency: 'coins' },
-    { id: 'cpu', name: 'CPU Ryzen 7', icon: '⚙️', desc: 'Más cores = más código', clickBonus: 3, lpsBonus: 3, cost: 2000, costMult: 1.6, currency: 'coins' },
-    { id: 'gpu', name: 'GPU RTX 5060', icon: '🎮', desc: 'CUDA para IA', clickBonus: 5, lpsBonus: 5, cost: 8000, costMult: 1.7, currency: 'coins' },
+    { id: 'cpu', name: 'CPU', icon: '⚙️', desc: 'Más cores = más código', clickBonus: 3, lpsBonus: 3, cost: 2000, costMult: 1.6, currency: 'coins' },
+    { id: 'gpu', name: 'GPU', icon: '🎮', desc: 'CUDA para IA', clickBonus: 5, lpsBonus: 5, cost: 8000, costMult: 1.7, currency: 'coins' },
     { id: 'monitor4k', name: 'Monitor 4K', icon: '🖥️', desc: 'Más pantalla más código visible', clickBonus: 2, lpsBonus: 2, cost: 3000, costMult: 1.5, currency: 'coins' },
     { id: 'dualmonitor', name: 'Doble Monitor', icon: '📺', desc: 'El doble de productividad', clickBonus: 4, lpsBonus: 4, cost: 10000, costMult: 1.6, currency: 'coins' },
     { id: 'server', name: 'Servidor Dedicado', icon: '🗄️', desc: 'CI/CD sin parar', clickBonus: 10, lpsBonus: 20, cost: 50000, costMult: 1.8, currency: 'coins' },
@@ -137,7 +137,7 @@ const Game = (() => {
     timeInterval = setInterval(() => { state.playTime++; }, 1000);
 
     UI.init(levels, WORKERS, COMPONENTS_COINS, COMPONENTS_GEMS, UPGRADES, ACHIEVEMENTS);
-    UI.render();
+    UI.render(true);
   }
 
   function mergeState(saved) {
@@ -162,7 +162,7 @@ const Game = (() => {
     state.linesPerSec = lps;
     checkLevelComplete();
     checkAchievements();
-    UI.render();
+    UI.render(false);
   }
 
   function calcLPS() {
@@ -215,7 +215,7 @@ const Game = (() => {
     if (coinGain > 0) UI.spawnFloater(`+${fmt(coinGain)} 🪙`, true);
     checkLevelComplete();
     checkAchievements();
-    UI.render();
+    UI.render(false);
   }
 
   function addLines(n) {
@@ -231,13 +231,15 @@ const Game = (() => {
     if (!w) return;
     const count = state.workers[id] || 0;
     const cost = Math.floor(w.baseCost * Math.pow(w.costMult, count));
-    if (w.currency === 'coins' && Math.floor(state.coins + 0.0001) < cost) return;
-    if (w.currency === 'gems' && state.gems < cost) return;
-    if (w.currency === 'coins') state.coins -= cost;
+
+    if (!canAfford(w.currency, cost)) return;
+
+    if (w.currency === 'coins') state.coins = Math.max(0, state.coins - cost);
     else state.gems -= cost;
+    
     state.workers[id] = count + 1;
     log(`👷 Contratado: ${w.name} #${count + 1}`);
-    UI.render();
+    UI.render(true);
   }
 
   function buyComponent(id) {
@@ -245,27 +247,36 @@ const Game = (() => {
     if (!c) return;
     const count = state.components[id] || 0;
     const cost = Math.floor(c.cost * Math.pow(c.costMult, count));
-    if (c.currency === 'coins' && Math.floor(state.coins + 0.0001) < cost) return;
-    if (c.currency === 'gems' && state.gems < cost) return;
-    if (c.currency === 'coins') state.coins -= cost;
+
+    if (!canAfford(c.currency, cost)) return;
+
+    if (c.currency === 'coins') state.coins = Math.max(0, state.coins - cost);
     else state.gems -= cost;
+    
     state.components[id] = count + 1;
     log(`🔧 Comprado: ${c.name} x${count + 1}`);
-    UI.render();
+    UI.render(true);
   }
 
   function buyUpgrade(id) {
     if (state.upgrades[id]) return;
     const u = UPGRADES.find(x => x.id === id);
     if (!u || !u.req()) return;
-    if (u.currency === 'coins' && Math.floor(state.coins + 0.0001) < u.cost) return;
-    if (u.currency === 'gems' && state.gems < u.cost) return;
-    if (u.currency === 'coins') state.coins -= u.cost;
+
+    if (!canAfford(u.currency, u.cost)) return;
+
+    if (u.currency === 'coins') state.coins = Math.max(0, state.coins - u.cost);
     else state.gems -= u.cost;
+    
     state.upgrades[id] = true;
     u.effect();
     log(`⬆️ Mejora desbloqueada: ${u.name}`);
-    UI.render();
+    UI.render(true);
+  }
+
+  function canAfford(currency, cost) {
+    const balance = (currency === 'coins') ? (state.coins + 0.01) : state.gems;
+    return Math.floor(balance) >= cost;
   }
 
   // ── Level system ───────────────────────────────────────────────────────────
@@ -310,7 +321,7 @@ const Game = (() => {
       return;
     }
     state.currentLevelId = id;
-    UI.render();
+    UI.render(true);
   }
 
   // ── Prestige ───────────────────────────────────────────────────────────────
@@ -348,7 +359,7 @@ const Game = (() => {
     log(`⚡ Prestige #${keepPrestige}! Multiplicador global: ×${globalMultiplier.toFixed(1)}`);
     UI.closeModal();
     save();
-    UI.render();
+    UI.render(true);
   }
 
   function requestClose() {
@@ -406,7 +417,7 @@ const Game = (() => {
     if (n >= 1e9) return (n / 1e9).toFixed(2) + 'B';
     if (n >= 1e6) return (n / 1e6).toFixed(2) + 'M';
     if (n >= 1e3) return (n / 1e3).toFixed(1) + 'K';
-    return Math.floor(n + 0.0001).toString();
+    return Math.floor(n + 0.01).toString();
   }
 
   const logs = [];
@@ -419,7 +430,7 @@ const Game = (() => {
   // ── Public API ─────────────────────────────────────────────────────────────
   return {
     init, click, save, resetConfirm, prestige, requestClose,
-    buyWorker, buyComponent, buyUpgrade, switchLevel,
+    buyWorker, buyComponent, buyUpgrade, switchLevel, canAfford,
     getState: () => state,
     getLevels: () => levels,
     getWorkers: () => WORKERS,

@@ -24,7 +24,7 @@ function createWindow() {
     backgroundColor: '#0d0d0f',
     show: false,
     fullscreen: true,
-    skipTaskbar: true,
+    skipTaskbar: false,
     alwaysOnTop: false,
     icon: path.join(__dirname, '../assets/icon.png')
   });

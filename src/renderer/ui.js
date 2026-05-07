@@ -23,17 +23,23 @@ const UI = (() => {
     }, 2500);
   }
 
-  function render() {
+  function render(full = false) {
     const state = Game.getState();
     renderCurrencies(state);
     renderClickerStats(state);
     renderLevelInfo(state);
     renderPrestige(state);
-    if (_activeTab === 'shop') renderShop(state);
-    if (_activeTab === 'workers') renderWorkers(state);
-    if (_activeTab === 'upgrades') renderUpgrades(state);
-    if (_activeTab === 'levels') renderLevels(state);
-    if (_activeTab === 'achievements') renderAchievements(state);
+
+    if (full) {
+      if (_activeTab === 'shop') renderShop(state);
+      if (_activeTab === 'workers') renderWorkers(state);
+      if (_activeTab === 'upgrades') renderUpgrades(state);
+      if (_activeTab === 'levels') renderLevels(state);
+      if (_activeTab === 'achievements') renderAchievements(state);
+    } else {
+      updatePurchaseButtons(state);
+    }
+
     renderStats(state);
     renderMilestones(state);
   }
@@ -85,12 +91,13 @@ const UI = (() => {
   function componentCard(c, state) {
     const count = state.components[c.id] || 0;
     const cost = Game.componentCost(c.id);
-    const canAfford = c.currency === 'coins' ? Math.floor(state.coins + 0.0001) >= cost : state.gems >= cost;
+    const canAfford = Game.canAfford(c.currency, cost);
     const costIcon = c.currency === 'coins' ? '🪙' : '💎';
     const costClass = c.currency === 'coins' ? 'cost-coin' : 'cost-gem';
     const btnClass = c.currency === 'coins' ? '' : 'gem-btn';
     const el = document.createElement('div');
-    el.className = `item-card${canAfford ? ' affordable' : ''}`;
+    el.className = `item-card${canAfford ? ' affordable' : ''}${count > 0 ? ' owned' : ''}`;
+    el.onclick = () => Game.buyComponent(c.id);
     el.innerHTML = `
       <span class="item-icon">${c.icon}</span>
       <div class="item-info">
@@ -100,7 +107,7 @@ const UI = (() => {
       </div>
       <div class="item-right">
         <div class="item-cost ${costClass}">${costIcon} ${Game.fmt(cost)}</div>
-        <button class="buy-btn ${btnClass}" ${canAfford ? '' : 'disabled'} onclick="event.stopPropagation(); Game.buyComponent('${c.id}')">Comprar</button>
+        <button class="buy-btn ${btnClass}" data-cost="${cost}" data-currency="${c.currency}" ${canAfford ? '' : 'disabled'}>Comprar</button>
       </div>`;
     return el;
   }
@@ -109,12 +116,13 @@ const UI = (() => {
     renderList('workers-list', _workers, (w) => {
       const count = state.workers[w.id] || 0;
       const cost = Game.workerCost(w.id);
-      const canAfford = w.currency === 'coins' ? Math.floor(state.coins + 0.0001) >= cost : state.gems >= cost;
+      const canAfford = Game.canAfford(w.currency, cost);
       const costIcon = w.currency === 'coins' ? '🪙' : '💎';
       const costClass = w.currency === 'coins' ? 'cost-coin' : 'cost-gem';
       const btnClass = w.currency === 'coins' ? '' : 'gem-btn';
       const el = document.createElement('div');
-      el.className = `item-card${canAfford ? ' affordable' : ''}`;
+      el.className = `item-card${canAfford ? ' affordable' : ''}${count > 0 ? ' owned' : ''}`;
+      el.onclick = () => Game.buyWorker(w.id);
       el.innerHTML = `
         <span class="item-icon">${w.icon}</span>
         <div class="item-info">
@@ -124,7 +132,7 @@ const UI = (() => {
         </div>
         <div class="item-right">
           <div class="item-cost ${costClass}">${costIcon} ${Game.fmt(cost)}</div>
-          <button class="buy-btn ${btnClass}" ${canAfford ? '' : 'disabled'} onclick="event.stopPropagation(); Game.buyWorker('${w.id}')">Contratar</button>
+          <button class="buy-btn ${btnClass}" data-cost="${cost}" data-currency="${w.currency}" ${canAfford ? '' : 'disabled'}>Contratar</button>
         </div>`;
       return el;
     });
@@ -134,11 +142,12 @@ const UI = (() => {
     renderList('upgrades-list', _upgrades, (u) => {
       const owned = !!state.upgrades[u.id];
       const canReq = u.req();
-      const canAfford = u.currency === 'coins' ? Math.floor(state.coins + 0.0001) >= u.cost : state.gems >= u.cost;
+      const canAfford = Game.canAfford(u.currency, u.cost);
       const costIcon = u.currency === 'coins' ? '🪙' : '💎';
       const costClass = u.currency === 'coins' ? 'cost-coin' : 'cost-gem';
       const el = document.createElement('div');
-      el.className = `item-card${!canReq ? ' locked' : canAfford && !owned ? ' affordable' : ''}${owned ? ' maxed' : ''}`;
+      el.className = `item-card${!canReq ? ' locked' : canAfford && !owned ? ' affordable' : ''}${owned ? ' maxed owned' : ''}`;
+      if (!owned && canReq) el.onclick = () => Game.buyUpgrade(u.id);
       el.innerHTML = `
         <span class="item-icon">${u.icon}</span>
         <div class="item-info">
@@ -148,7 +157,7 @@ const UI = (() => {
         <div class="item-right">
           ${owned ? `<button class="buy-btn purchased" disabled>✓ Activa</button>` :
           `<div class="item-cost ${costClass}">${costIcon} ${Game.fmt(u.cost)}</div>
-           <button class="buy-btn" ${canAfford && canReq ? '' : 'disabled'} onclick="event.stopPropagation(); Game.buyUpgrade('${u.id}')">Comprar</button>`}
+           <button class="buy-btn" data-cost="${u.cost}" data-currency="${u.currency}" ${canAfford && canReq ? '' : 'disabled'}>Comprar</button>`}
         </div>`;
       return el;
     });
@@ -206,42 +215,77 @@ const UI = (() => {
 
   function renderStats(state) {
     const lps = Game.calcLPS();
-    const rows = [
-      ['Líneas/click', Game.fmt(Game.calcClickPower())],
-      ['Líneas/sec', Game.fmt(lps)],
-      ['Coins totales', Game.fmt(state.coins)],
-      ['Gems totales', Game.fmt(state.gems)],
-      ['Total clics', Game.fmt(state.totalClicks)],
-      ['Workers', Game.fmt(Game.totalWorkers())],
-      ['Nivel actual', Game.currentLevel()?.meta?.name || 'HTML'],
-      ['Niveles completos', state.completedLevels.length],
-      ['Prestiges', state.prestigeCount],
-      ['Tiempo jugado', fmtTime(state.playTime)],
+    const statsData = [
+      { id: 'st-lpc', label: 'Líneas/click', val: Game.fmt(Game.calcClickPower()) },
+      { id: 'st-lps', label: 'Líneas/sec', val: Game.fmt(lps) },
+      { id: 'st-coins', label: 'Coins totales', val: Game.fmt(state.coins) },
+      { id: 'st-gems', label: 'Gems totales', val: Game.fmt(state.gems) },
+      { id: 'st-clicks', label: 'Total clics', val: Game.fmt(state.totalClicks) },
+      { id: 'st-workers', label: 'Workers', val: Game.fmt(Game.totalWorkers()) },
+      { id: 'st-level', label: 'Nivel actual', val: Game.currentLevel()?.meta?.name || 'HTML' },
+      { id: 'st-levels-comp', label: 'Niveles completos', val: state.completedLevels.length },
+      { id: 'st-prestige', label: 'Prestiges', val: state.prestigeCount },
+      { id: 'st-time', label: 'Tiempo jugado', val: fmtTime(state.playTime) },
     ];
+
     const container = document.getElementById('stats-list');
-    container.innerHTML = rows.map(([label, val]) =>
-      `<div class="stat-row"><span class="stat-row-label">${label}</span><span class="stat-row-val">${val}</span></div>`
-    ).join('');
+    if (container.children.length === 0) {
+      container.innerHTML = statsData.map(s => 
+        `<div class="stat-row"><span class="stat-row-label">${s.label}</span><span class="stat-row-val" id="${s.id}">${s.val}</span></div>`
+      ).join('');
+    } else {
+      statsData.forEach(s => {
+        const el = document.getElementById(s.id);
+        if (el) el.textContent = s.val;
+      });
+    }
   }
 
   function renderMilestones(state) {
     const lps = Game.calcLPS();
     const milestones = [
-      { label: '1K líneas', val: 1000, curr: state.totalLines },
-      { label: '10K coins', val: 10000, curr: state.coins },
-      { label: '10 LPS', val: 10, curr: lps },
-      { label: '1M líneas', val: 1000000, curr: state.totalLines },
-      { label: '10 gems', val: 10, curr: state.gems },
-      { label: '1K LPS', val: 1000, curr: lps },
+      { id: 'm-1k', label: '1K líneas', val: 1000, curr: state.totalLines },
+      { id: 'm-10kc', label: '10K coins', val: 10000, curr: state.coins },
+      { id: 'm-10lps', label: '10 LPS', val: 10, curr: lps },
+      { id: 'm-1ml', label: '1M líneas', val: 1000000, curr: state.totalLines },
+      { id: 'm-10g', label: '10 gems', val: 10, curr: state.gems },
+      { id: 'm-1klps', label: '1K LPS', val: 1000, curr: lps },
     ];
+
     const container = document.getElementById('milestones-list');
-    container.innerHTML = milestones.map(m => {
+    if (container.children.length === 0) {
+      container.innerHTML = milestones.map(m => `
+        <div class="milestone-row" id="row-${m.id}">
+          <div class="milestone-dot" id="dot-${m.id}"></div>
+          <span class="milestone-text" id="txt-${m.id}"></span>
+        </div>`).join('');
+    }
+
+    milestones.forEach(m => {
       const done = m.curr >= m.val;
-      return `<div class="milestone-row">
-        <div class="milestone-dot" style="background:${done ? 'var(--green)' : 'var(--border2)'}"></div>
-        <span class="milestone-text" style="color:${done ? 'var(--green)' : 'var(--text3)'}">${m.label} ${done ? '✓' : `(${Game.fmt(m.curr)}/${Game.fmt(m.val)})`}</span>
-      </div>`;
-    }).join('');
+      const dot = document.getElementById(`dot-${m.id}`);
+      const txt = document.getElementById(`txt-${m.id}`);
+      if (dot) dot.style.background = done ? 'var(--green)' : 'var(--border2)';
+      if (txt) {
+        txt.style.color = done ? 'var(--green)' : 'var(--text3)';
+        txt.textContent = `${m.label} ${done ? '✓' : `(${Game.fmt(m.curr)}/${Game.fmt(m.val)})`}`;
+      }
+    });
+  }
+
+  function updatePurchaseButtons(state) {
+    const buttons = document.querySelectorAll('.buy-btn:not(.purchased)');
+    buttons.forEach(btn => {
+      const cost = parseFloat(btn.dataset.cost);
+      const currency = btn.dataset.currency;
+      const canAfford = Game.canAfford(currency, cost);
+      btn.disabled = !canAfford;
+      
+      const card = btn.closest('.item-card');
+      if (card && !card.classList.contains('locked') && !card.classList.contains('maxed')) {
+        card.classList.toggle('affordable', canAfford);
+      }
+    });
   }
 
   // ── Helpers ────────────────────────────────────────────────────────────────
@@ -355,7 +399,7 @@ const UI = (() => {
     document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
     document.querySelector(`[data-tab="${name}"]`)?.classList.add('active');
     document.getElementById(`tab-${name}`)?.classList.add('active');
-    render();
+    render(true);
   }
 
   return {

@@ -38,7 +38,13 @@
       "src/**/*",
       "levels/**/*",
       "assets/**/*",
-      "package.json"
+      "package.json",
+      "!**/*.ps1",
+      "!**/*.bat",
+      "!**/*.py",
+      "!**/*.spec",
+      "!dist/**/*",
+      "!publish/**/*"
     ]
   },
   "devDependencies": {
