@@ -143,6 +143,18 @@ const Game = (() => {
     saveInterval = setInterval(save, 30000);
     timeInterval = setInterval(() => { state.playTime++; }, 1000);
 
+    // Escuchar la tecla Escape para el menú o cerrar modales
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const modalOverlay = document.getElementById('modal-overlay');
+        if (modalOverlay && !modalOverlay.classList.contains('hidden')) {
+          UI.closeModal();
+        } else {
+          requestClose();
+        }
+      }
+    });
+
     UI.init(levels, WORKERS, COMPONENTS_COINS, COMPONENTS_GEMS, UPGRADES, ACHIEVEMENTS);
     UI.render(true);
   }
